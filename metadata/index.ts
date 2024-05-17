@@ -7,11 +7,11 @@ export const siteDescription = '记录回忆，知识和畅想的地方'
 export const include = ['笔记', '生活']
 
 /** Repo */
-export const githubRepoLink = 'https://github.com/Limesty/knowledge-test'
+export const githubRepoLink = 'https://github.com/Limesty/knowledge'
 /** Discord */
 export const discordLink = 'https://discord.gg/XuNFDcDZGj'
 
 /** 无协议前缀域名 */
-export const plainTargetDomain = 'n1.limesty.moe'
+export const plainTargetDomain = 'n.limesty.moe'
 /** 完整域名 */
 export const targetDomain = `https://${plainTargetDomain}`
