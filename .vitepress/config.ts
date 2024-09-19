@@ -7,9 +7,9 @@ import { BiDirectionalLinks } from '@nolebase/markdown-it-bi-directional-links'
 import { InlineLinkPreviewElementTransform } from '@nolebase/vitepress-plugin-inline-link-preview/markdown-it'
 import { buildEndGenerateOpenGraphImages } from '@nolebase/vitepress-plugin-og-image/vitepress'
 import { UnlazyImages } from '@nolebase/markdown-it-unlazy-img'
+import { transformHeadMeta } from '@nolebase/vitepress-plugin-meta'
 
-import { discordLink, githubRepoLink, siteDescription, siteName, targetDomain } from '../metadata'
-import { creatorNames, creatorUsernames } from './creators'
+import { creatorNames, creatorUsernames, discordLink, githubRepoLink, siteDescription, siteName, targetDomain } from '../metadata'
 import { sidebar } from './docsMetadata.json'
 
 export default defineConfig({
@@ -183,7 +183,7 @@ export default defineConfig({
 
           contentPart = content ||= src
 
-          const headingMatch = content.match(/^#{1} .*/m)
+          const headingMatch = content.match(/^# .*/m)
           const hasHeading = !!(headingMatch && headingMatch[0] && headingMatch.index !== undefined)
 
           if (hasHeading) {
@@ -222,17 +222,24 @@ export default defineConfig({
     math: true,
     config: (md) => {
       md.use(MarkdownItFootnote)
-      md.use(MarkdownItMathjax3)
+      md.use(MarkdownItMathjax3 as any)
       md.use(BiDirectionalLinks({
         dir: process.cwd(),
-      }))
-      md.use(UnlazyImages(), {
+      }) as any)
+      md.use(UnlazyImages() as any, {
         imgElementTag: 'NolebaseUnlazyImg',
       })
-      md.use(InlineLinkPreviewElementTransform, {
-        tag: 'VPNolebaseInlineLinkPreview',
-      })
+      md.use(InlineLinkPreviewElementTransform as any)
     },
+  },
+  async transformHead(context) {
+    let head = [...context.head]
+
+    const returnedHead = await transformHeadMeta()(head, context)
+    if (typeof returnedHead !== 'undefined')
+      head = returnedHead
+
+    return head
   },
   async buildEnd(siteConfig) {
     await buildEndGenerateOpenGraphImages({
