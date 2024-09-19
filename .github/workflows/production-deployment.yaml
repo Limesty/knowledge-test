@@ -1,4 +1,4 @@
-name: 构建并部署到 Netlify
+name: 构建并部署到 Cloudflare
 
 on:
   push:
@@ -51,11 +51,6 @@ jobs:
 
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
-
-      - name: 安装思源黑体
-        run: |
-          mkdir -p ~/.local/share/fonts
-          cp public/source-han-sans.ttf ~/.local/share/fonts/source-han-sans.ttf
 
       - name: 构建
         run: pnpm docs:build
